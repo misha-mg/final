@@ -1,24 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import ProductList from './pages/product/product-list'; 
+import CategoryList from './pages/category/category-list';
+import ButtonAppBar from './app-bar'
+import { useState } from 'react'
+import { Provider } from 'react-redux'
+import { ContextCurrency } from './context/currency';
+import { BrowserRouter } from "react-router-dom";
+import { Route, Routes } from "react-router";
+import store from './store';
+import CurrencyList from './pages/currency/currency';
+import { Main } from './pages/main/main-page';
+
+
 
 function App() {
+
+  const [currentCurrency, setCurrentCurrency] = useState(null)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store} >
+    <ContextCurrency.Provider value={currentCurrency}>
+      <div className="App">
+        <BrowserRouter >
+          <ButtonAppBar context={{ currentCurrency, setCurrentCurrency }} />
+
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='/products' element={<ProductList />} />
+            <Route path='categories' element={<CategoryList />} />
+            <Route path='currency' element={<CurrencyList />} />
+
+
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ContextCurrency.Provider>
+
+    </Provider>
   );
 }
 
